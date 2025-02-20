@@ -25,7 +25,7 @@ namespace WagesApp;
         foreach (var day in DAYS)
         {
             Console.WriteLine($"Enter the hours worked on {day}:");
-67575       hoursWorked.Add(int.Parse(Console.ReadLine()));
+            hoursWorked.Add(int.Parse(Console.ReadLine()));
         }
 
 
