@@ -11,6 +11,18 @@ namespace WagesApp;
     static readonly float PAYRATE = 22.00f, TAXA = 0.075f, TAXB = 0.08f;
 
     // methods or functions
+    static string PaySummary(string name, List<int> hrsWorked)
+    {
+        return "----- Pay Summary ----\n" +
+            $"Employee Name: {name}\n" +
+            $"Hours Worked: {SumHoursWorked(hrsWorked)}\n" +
+            $"Bonus Owed: {CalculateBonus(hrsWorked)}\n" +
+            $"Gross Pay: {(CalculateWages(hrsWorked) + CalculateBonus(hrsWorked))}\n" +
+            $"Net Pay: ${CalculateWages(hrsWorked) + CalculateBonus(hrsWorked) - CalculateTax(hrsWorked)}";
+    }
+
+    // Calculate tax (pay < 450 then 7.5% else tax = 8%)
+
     static float CalculateTax(List<int> hrsWorked)
     {
 
@@ -22,16 +34,23 @@ namespace WagesApp;
         return (CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXB;
     }
 
-    static float CalculateBonus(List<int> hrsWorked)
-    { 
 
-        if(SumHoursWorked(hrsWorked) > 30)
+    // If employee qualifies for a bonus, add bonus to weekly pay
+
+    static float CalculateBonus(List<int> hrsWorked)
+    {
+
+        // Calculate total hours worked in a week
+
+        if (SumHoursWorked(hrsWorked) > 30)
         {
             return 5 * PAYRATE;
         }
 
         return 0;
     }
+
+    // Calculate weekly wages (payrate_*_total hours worked)
 
     static float CalculateWages(List<int> hrsWorked)
     {
@@ -69,26 +88,14 @@ namespace WagesApp;
         }
 
 
-        // Calculate total hours worked in a week
-        Console.WriteLine($"Total Hours Worked: {SumHoursWorked(hoursWorked)}");
+        
+        
 
-
-        // Calculate weekly wages (payrate_*_total hours worked)
-        Console.WriteLine($"Wages for the week: ${CalculateWages(hoursWorked)}");
-
-        // Determine if employee qualifies for a bonus(>30 hours per week)
-        Console.WriteLine($"Bonus: ${CalculateBonus(hoursWorked)}");
-
-
-        // If employee qualifies for a bonus, add bonus to weekly pay
-
-
-        // Calculate tax (pay < 450 then 7.5% else tax = 8%)
-        Console.WriteLine($"Taxes Owed: ${CalculateTax(hoursWorked)}");
-
-        Console.ReadLine();
+        Console.WriteLine(PaySummary(employeename, hoursWorked));
 
         // Display employees pay summary
+
+        Console.ReadLine();
     }
 
     // when run... 
