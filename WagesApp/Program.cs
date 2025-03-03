@@ -11,6 +11,11 @@ namespace WagesApp;
     static readonly float PAYRATE = 22.00f, TAXA = 0.075f, TAXB = 0.08f;
 
     // methods or functions
+    static string FormatToDollar(float value)
+    {
+        return string.Format({ "0:0.00"});
+    }
+
     static string PaySummary(string name, List<int> hrsWorked)
     {
         return "----- Pay Summary ----\n" +
@@ -29,10 +34,10 @@ namespace WagesApp;
 
         if(CalculateWages(hrsWorked)+CalculateBonus(hrsWorked) < 450)
         {
-            return (CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXA;
+            return (float)Math.Round((CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXA, 2);
         }
 
-        return (CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXB;
+            return (float)Math.Round((CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXB, 2);
     }
 
 
@@ -45,7 +50,7 @@ namespace WagesApp;
 
         if (SumHoursWorked(hrsWorked) > 30)
         {
-            return 5 * PAYRATE;
+            return (float)Math.Round(5 * PAYRATE, 2);
         }
 
         return 0;
