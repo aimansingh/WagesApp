@@ -16,9 +16,10 @@ namespace WagesApp;
         return "----- Pay Summary ----\n" +
             $"Employee Name: {name}\n" +
             $"Hours Worked: {SumHoursWorked(hrsWorked)}\n" +
-            $"Bonus Owed: {CalculateBonus(hrsWorked)}\n" +
-            $"Gross Pay: {(CalculateWages(hrsWorked) + CalculateBonus(hrsWorked))}\n" +
-            $"Net Pay: ${CalculateWages(hrsWorked) + CalculateBonus(hrsWorked) - CalculateTax(hrsWorked)}";
+            $"Bonus Owed:${CalculateBonus(hrsWorked)}\n" +
+            $"Gross Pay:${CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)}\n" +
+            $"Net Pay: ${CalculateWages(hrsWorked) + CalculateBonus(hrsWorked) - CalculateTax(hrsWorked)}\n" +
+            $"Tax Owed: ${CalculateTax(hrsWorked)}";
     }
 
     // Calculate tax (pay < 450 then 7.5% else tax = 8%)
