@@ -1,52 +1,75 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Globalization;
+using System.Reflection.Metadata;
 
 namespace WagesApp;
 
-    class Program
-    {
+class Program
+{
 
-    // global variables
-    static List<string> DAYS = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    // Global variables
+    static List<string> DAYS = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+
     // Constant Variable
     static readonly float PAYRATE = 22.00f, TAXA = 0.075f, TAXB = 0.08f;
 
-    // methods or functions
+    // Methods or Functions
+
+    static int CheckHoursWorked(string day)
+    {
+        while(true)
+        {
+            Console.WriteLine($"\nEnter the hours worked on {day}:");
+            int hoursWorked = Convert.ToInt32(Console.ReadLine());
+
+            if(hoursWorked >= 0 && hoursWorked <= 24)
+            {
+                return hoursWorked;
+            }
+
+            Console.WriteLine("ERROR: Hours worked must be between 0 and 24");
+
+        }
+    }
+
+
+    static string CheckName(string name)
+    {
+        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+
+        return textInfo.ToTitleCase(name);
+    }
     static string FormatToDollar(float value)
     {
         return string.Format("{0:0.00}", value);
     }
-
     static string PaySummary(string name, List<int> hrsWorked)
     {
-        return "----- Pay Summary ----\n" +
+        return "\n----- Pay Summary ----\n" +
             $"Employee Name: {name}\n" +
             $"Hours Worked: {SumHoursWorked(hrsWorked)}\n" +
-            $"Bonus Owed:${FormatToDollar(CalculateBonus(hrsWorked))}\n" +
-            $"Gross Pay:${FormatToDollar(CalculateWages(hrsWorked) + CalculateBonus(hrsWorked))}\n" +
-            $"Net Pay: ${FormatToDollar(CalculateWages(hrsWorked) + CalculateBonus(hrsWorked) - CalculateTax(hrsWorked))}\n" +
-            $"Tax Owed: ${FormatToDollar(CalculateTax(hrsWorked))}";
+            $"Bonus Owed: ${FormatToDollar(CalculateBonus(hrsWorked))}\n" +
+            $"Gross Pay: ${FormatToDollar(CalculateWages(hrsWorked) + CalculateBonus(hrsWorked))}\n" +
+            $"Tax Owed: ${FormatToDollar(CalculateTax(hrsWorked))}\n" +
+            $"Net Pay: ${FormatToDollar(CalculateWages(hrsWorked) + CalculateBonus(hrsWorked) - CalculateTax(hrsWorked))}";
+
     }
 
-    // Calculate tax (pay < 450 then 7.5% else tax = 8%)
-
+    // Calculate tax (pay < 450 then tax = 7.5% else tax = 8%)
     static float CalculateTax(List<int> hrsWorked)
     {
 
-        if(CalculateWages(hrsWorked)+CalculateBonus(hrsWorked) < 450)
+
+        if (CalculateWages(hrsWorked) + CalculateBonus(hrsWorked) < 450)
         {
             return (float)Math.Round((CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXA, 2);
         }
 
-            return (float)Math.Round((CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXB, 2);
+        return (float)Math.Round((CalculateWages(hrsWorked) + CalculateBonus(hrsWorked)) * TAXB, 2);
     }
 
-
-    // If employee qualifies for a bonus, add bonus to weekly pay
-
+    // Determine if employee qualifies for a bonus (>30 hours for the week)
     static float CalculateBonus(List<int> hrsWorked)
     {
-
-        // Calculate total hours worked in a week
 
         if (SumHoursWorked(hrsWorked) > 30)
         {
@@ -56,67 +79,57 @@ namespace WagesApp;
         return 0;
     }
 
-    // Calculate weekly wages (payrate_*_total hours worked)
-
+    // Calculate weekly wages (total hours x pay rate)
     static float CalculateWages(List<int> hrsWorked)
     {
         return (float)Math.Round(SumHoursWorked(hrsWorked) * PAYRATE, 2);
     }
 
+    // Calculate total hours worked
     static int SumHoursWorked(List<int> hrsWorked)
     {
-        int SumHoursWorked = 0;
+        int sumHoursWorked = 0;
 
         foreach (int hour in hrsWorked)
         {
-            SumHoursWorked += hour;
+            sumHoursWorked += hour;
         }
 
-        return SumHoursWorked;
+        return sumHoursWorked;
     }
-
     static void OneEmployee()
     {
-        // localvariables
-        string employeename;
+        // Local variables
+        string employeeName;
         List<int> hoursWorked = new List<int>();
 
         // Input employee name
-        Console.WriteLine("Enter The Employee's Name:");
-        employeename = Console.ReadLine();
+        Console.WriteLine("Enter the employee's name:");
+        employeeName = CheckName(Console.ReadLine());
 
 
-        // Input the number of hours worked each day
+        // Input the number of hours worked for each day
         foreach (var day in DAYS)
         {
-            Console.WriteLine($"Enter the hours worked on {day}:");
-            hoursWorked.Add(int.Parse(Console.ReadLine()));
+            
+            hoursWorked.Add(CheckHoursWorked(day));
         }
-
-
-        
-        
-
-        Console.WriteLine(PaySummary(employeename, hoursWorked));
 
         // Display employees pay summary
-
-        Console.ReadLine();
+        Console.WriteLine(PaySummary(employeeName, hoursWorked));
     }
 
-    // when run... 
+    // When Run...
     static void Main(string[] args)
-        {
+    {
+        DAYS.AsReadOnly();
 
-            DAYS.AsReadOnly();
-            // Call OneEmployee Method
-            OneEmployee();
+        // Call OneEmployee Method
+        OneEmployee();
 
-            // Display total amount payed to all employees
+        // Display total amount paid to all employees
 
-            // Display highest paid employee
-
+        // Display highest paid employee
 
     }
-
-        }
+}
