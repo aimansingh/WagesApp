@@ -126,6 +126,7 @@ class Program
 
         // Call OneEmployee Method
         OneEmployee();
+        Console.ReadLine();
 
         // Display total amount paid to all employees
 
