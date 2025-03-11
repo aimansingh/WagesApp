@@ -5,7 +5,6 @@ namespace WagesApp;
 
 class Program
 {
-
     // Global variables
     static List<string> DAYS = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
 
@@ -13,30 +12,52 @@ class Program
     static readonly float PAYRATE = 22.00f, TAXA = 0.075f, TAXB = 0.08f;
 
     // Methods or Functions
-
     static int CheckHoursWorked(string day)
     {
-        while(true)
+        while (true)
         {
-            Console.WriteLine($"\nEnter the hours worked on {day}:");
-            int hoursWorked = Convert.ToInt32(Console.ReadLine());
-
-            if(hoursWorked >= 0 && hoursWorked <= 24)
+            try
             {
-                return hoursWorked;
+                Console.WriteLine($"\nEnter the hours worked on {day}:");
+                int hoursWorked = Convert.ToInt32(Console.ReadLine());
+
+                if (hoursWorked >= 0 && hoursWorked <= 24)
+                {
+                    return hoursWorked;
+                }
+
+                Console.WriteLine("Error: Hours worked must be between 0 and 24");
+            }
+            catch
+            {
+                Console.WriteLine("Error: Hours worked must be between 0 and 24");
             }
 
-            Console.WriteLine("ERROR: Hours worked must be between 0 and 24");
-
         }
-    }
-
-
-    static string CheckName(string name)
+    }   
+    static string CheckName()
     {
+        //local declarations
+        string employeeName;
         TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
-        return textInfo.ToTitleCase(name);
+        while (true)
+        {
+            Console.WriteLine("Enter the employee's name:");
+
+            employeeName = textInfo.ToTitleCase(Console.ReadLine());
+
+            if (!employeeName.Equals("") && !employeeName.Any(char.IsDigit))
+            {
+                return employeeName;
+            }
+
+            Console.WriteLine("Error: Invalid name entered");
+
+        }
+
+
+
     }
     static string FormatToDollar(float value)
     {
@@ -104,14 +125,13 @@ class Program
         List<int> hoursWorked = new List<int>();
 
         // Input employee name
-        Console.WriteLine("Enter the employee's name:");
-        employeeName = CheckName(Console.ReadLine());
 
+        employeeName = CheckName();
 
         // Input the number of hours worked for each day
         foreach (var day in DAYS)
         {
-            
+
             hoursWorked.Add(CheckHoursWorked(day));
         }
 
@@ -126,11 +146,8 @@ class Program
 
         // Call OneEmployee Method
         OneEmployee();
-        Console.ReadLine();
 
         // Display total amount paid to all employees
 
         // Display highest paid employee
-
-    }
-}
+}   }
