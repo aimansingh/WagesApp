@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Reflection.Metadata;
 
 namespace WagesApp;
@@ -7,15 +8,35 @@ class Program
 {
     // Global variables
     static List<string> DAYS = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+    static float sumWages = 0;
 
     // Constant Variable
     static readonly float PAYRATE = 22.00f, TAXA = 0.075f, TAXB = 0.08f;
 
     // Methods or Functions
+    static string CheckProceed()
+    {
+        string proceed;
+        while (true)
+        {
+            Console.WriteLine("Press <Enter> to add another employee's information or type 'Stop' to quit.");
+            proceed = Console.ReadLine().ToUpper();
+            if (proceed.Equals("") || proceed.Equals("STOP"))
+
+            {
+                return proceed;
+            }
+
+            Console.WriteLine("Erorr: Invalid Input");
+        }
+    }
+
     static int CheckHoursWorked(string day)
     {
         while (true)
         {
+            
+
             try
             {
                 Console.WriteLine($"\nEnter the hours worked on {day}:");
@@ -65,6 +86,9 @@ class Program
     }
     static string PaySummary(string name, List<int> hrsWorked)
     {
+
+        sumWages += CalculateWages(hrsWorked) + CalculateBonus(hrsWorked);
+
         return "\n----- Pay Summary ----\n" +
             $"Employee Name: {name}\n" +
             $"Hours Worked: {SumHoursWorked(hrsWorked)}\n" +
@@ -133,6 +157,7 @@ class Program
         {
 
             hoursWorked.Add(CheckHoursWorked(day));
+
         }
 
         // Display employees pay summary
@@ -144,10 +169,21 @@ class Program
     {
         DAYS.AsReadOnly();
 
-        // Call OneEmployee Method
-        OneEmployee();
+        string proceed = "";
+        while(proceed.Equals(""))
+        {
+            // Call OneEmployee Method
+            OneEmployee();
+
+
+            proceed = CheckProceed();
+        }
+
+
 
         // Display total amount paid to all employees
+        Console.WriteLine($"Total amount paid to employees: ${FormatToDollar(sumWages)}");
+        Console.ReadLine();
 
         // Display highest paid employee
 }   }
